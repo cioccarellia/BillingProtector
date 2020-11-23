@@ -1,0 +1,94 @@
+/**
+ * Designed and developed by Andrea Cioccarelli (@cioccarellia)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: "com.novoda.bintray-release"
+apply from: rootProject.file("library_info.gradle")
+
+private def getBintrayCredentialArray() {
+    // Grabs local properties
+    def localPropertiesFile = project.rootProject.file('local.properties')
+    
+    // If it exists, we use it to read credentials, otherwise we switch to system env variables
+    if (localPropertiesFile.exists()) {
+        logger.info("local.properties file found, reading credentials from it.")
+        
+        Properties properties = new Properties()
+        properties.load(localPropertiesFile.newDataInputStream())
+    
+        String user =   properties.getProperty("bintray.user")
+        String org =    properties.getProperty("bintray.organization")
+        String api =    properties.getProperty("bintray.apikey")
+    
+        if (user.isEmpty())
+            logger.debug("bintray.user property is empty.")
+        if (org.isEmpty())
+            logger.debug("bintray.organization property is empty.")
+        if (api.isEmpty())
+            logger.debug("bintray.apikey property is empty.")
+    
+        return [user, org, api]
+    } else {
+        logger.info("local.properties file not found, using system environment.")
+        
+        String user = System.env.BINTRAY_USER
+        String org = System.env.BINTRAY_ORG
+        String api = System.env.BINTRAY_API_KEY
+    
+        if (user.isEmpty())
+            logger.debug("BINTRAY_USER Sysyem Environment variable is empty.")
+        if (org.isEmpty())
+            logger.debug("BINTRAY_ORG Sysyem Environment variable is empty.")
+        if (api.isEmpty())
+            logger.debug("BINTRAY_API_KEY Sysyem Environment variable is empty.")
+        
+        return [user, org, api]
+    }
+}
+
+task checkBintrayConfig {
+    doLast {
+        for (credential in getBintrayCredentialArray()) {
+            if (credential.isEmpty()) {
+                throw new IllegalArgumentException("You must provide an API key, an organization and a username to deploy your artifacts to bintray")
+            }
+        }
+    }
+}
+
+afterEvaluate {
+    bintrayUpload.dependsOn checkBintrayConfig
+}
+
+if (module_name == null || module_name.isEmpty()) {
+    throw new Exception("module_must must be defined for each module.")
+}
+
+publish {
+    String[] credentials = getBintrayCredentialArray()
+    
+    bintrayUser =       credentials[0]
+    userOrg =           credentials[1]
+    bintrayKey =        credentials[2]
+    
+    groupId =           library.publish_group
+    artifactId =        library.artifact
+    
+    publishVersion =    library.publish_version
+    
+    desc =              library.description
+    website =           library.website
+    dryRun =            false
+}

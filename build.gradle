@@ -1,0 +1,35 @@
+buildscript {
+    // Global Kotlin versions
+    ext.kotlin_version = '1.4.10'
+    
+    // Dependencies
+    apply from: rootProject.file("dependencies.gradle")
+    
+    repositories {
+        google()
+        jcenter()
+    }
+    
+    dependencies {
+        classpath deps.gradle_plugins.android
+        classpath deps.gradle_plugins.bintray_release
+        classpath deps.gradle_plugins.kotlin
+        classpath deps.gradle_plugins.versions
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+subprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            jvmTarget = 1.8
+            freeCompilerArgs += ["-module-name", project.path.replace(':', '')]
+        }
+    }
+}

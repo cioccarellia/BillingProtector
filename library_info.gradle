@@ -1,0 +1,13 @@
+ext.library = [
+        min_sdk             : 15,
+        compile_sdk         : 30,
+        
+        artifact            : "",
+        
+        publish_group       : "com.cioccarellia",
+        publish_version     : "1.0.0",
+        publish_version_code: 1,
+        
+        description         : "(none)",
+        website             : "https://github.com/cioccarellia/"
+]
