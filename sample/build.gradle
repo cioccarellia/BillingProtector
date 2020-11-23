@@ -4,6 +4,7 @@ apply from: rootProject.file("gradle/android_application_config.gradle")
 
 dependencies {
     implementation project(":library")
+    implementation deps.kotlin.coroutines.core
     
     implementation deps.androidx.app_compat
     implementation deps.androidx.constraint_layout

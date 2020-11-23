@@ -1,6 +1,6 @@
 buildscript {
     // Global Kotlin versions
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.20'
     
     // Dependencies
     apply from: rootProject.file("dependencies.gradle")

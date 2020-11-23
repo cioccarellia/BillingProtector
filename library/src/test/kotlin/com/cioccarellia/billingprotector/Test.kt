@@ -13,14 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("EnumEntryName")
+package com.cioccarellia.billingprotector
 
-package com.cioccarellia.lib
-
-typealias Real = Float
-
-enum class VectorSpaceBase {
-    `1`, i, j, k
-}
-
-class Quaternion(a: Real, b: Real, c: Real, d: Real)
+class Test

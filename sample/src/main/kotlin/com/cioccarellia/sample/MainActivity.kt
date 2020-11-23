@@ -17,7 +17,10 @@ package com.cioccarellia.sample
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.cioccarellia.lib.Quaternion
+import com.cioccarellia.billingprotector.BillingProtector
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val q = Quaternion(7f, 6f, -3f, 2f)
+        CoroutineScope(Dispatchers.Default).launch {
+            BillingProtector(this@MainActivity).scan()
+        }
     }
 }

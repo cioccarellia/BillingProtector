@@ -5,6 +5,7 @@ apply from: rootProject.file("gradle/android_library_config.gradle")
 dependencies {
     compileOnly deps.androidx.annotations
     implementation deps.kotlin.stdlib8
+    implementation deps.kotlin.coroutines.core
     
     testImplementation deps.kotlin.test.mockito
     testImplementation deps.test.robolectric
